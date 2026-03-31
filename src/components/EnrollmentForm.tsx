@@ -102,15 +102,17 @@ export const EnrollmentForm = () => {
       cleanPhone = cleanPhone.slice(0, 11);
       const phoneToSend = "55" + cleanPhone;
 
-      const formData = new FormData();
-      formData.append("name", name.trim());
-      formData.append("phone", phoneToSend);
-      formData.append("turma", turmaConfig.label);
+      const params = new URLSearchParams();
+      params.append("name", name.trim());
+      params.append("phone", phoneToSend);
+      params.append("turma", turmaConfig.label);
 
       await fetch(turmaConfig.sheetUrl, {
         method: "POST",
-        body: formData,
-        mode: "no-cors"
+        body: params,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
       });
 
       // Valores dinâmicos para o Meta Pixel (turma + timestamp para variação)
