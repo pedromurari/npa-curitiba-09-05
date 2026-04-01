@@ -105,7 +105,7 @@ export const EnrollmentForm = () => {
       const params = new URLSearchParams();
       params.append("name", name.trim());
       params.append("phone", phoneToSend);
-      params.append("turma", turmaConfig.label);
+      params.append("turma", selectedTurma!.includes("manha") ? "manha" : "tarde");
 
       await fetch(turmaConfig.sheetUrl, {
         method: "POST",
