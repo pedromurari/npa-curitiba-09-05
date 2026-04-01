@@ -118,11 +118,12 @@ export const EnrollmentForm = () => {
       // Valores dinâmicos para o Meta Pixel (turma + timestamp para variação)
       const baseValue = 32.00;
       const uniqueValue = baseValue + Date.now() % 100 / 100; // Adiciona variação de centavos
-      const eventId = `npa_lp_cur_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+      const leadEventId = `npa_lead_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+      
       // 1. Obter Identidade Meta
       const { externalId, fbp, fbc } = MetaIdentity.getIdentity();
 
-      // 2. Salvar dados do usuário para persistência (correspondência avançada futura)
+      // 2. Salvar dados do usuário para persistência
       MetaIdentity.saveUserData({
         phone: phoneToSend,
         firstName: name.split(' ')[0],
@@ -135,7 +136,7 @@ export const EnrollmentForm = () => {
           content_name: `Inscrição - ${turmaConfig.label}`,
           status: 'pending'
         }, { 
-          eventID: eventId,
+          eventID: leadEventId,
           external_id: externalId
         });
       }
@@ -152,7 +153,7 @@ export const EnrollmentForm = () => {
           },
           body: JSON.stringify({
             eventName: 'Lead',
-            eventID: eventId,
+            eventID: leadEventId,
             testCode: testCode,
             fbp: fbp,
             fbc: fbc,
@@ -178,7 +179,7 @@ export const EnrollmentForm = () => {
       });
 
       setTimeout(() => {
-        const checkoutEventId = `${eventId}_checkout`;
+        const checkoutEventId = `npa_ic_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
         const { externalId, fbp, fbc } = MetaIdentity.getIdentity();
 
         if (typeof window !== 'undefined' && (window as any).fbq) {
