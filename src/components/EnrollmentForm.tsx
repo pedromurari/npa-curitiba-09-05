@@ -6,26 +6,26 @@ import { useToast } from "@/hooks/use-toast";
 import { User, Phone, Loader2, Calendar, MapPin } from "lucide-react";
 import { MetaIdentity } from "../utils/meta-identity";
 
-type TurmaOption = "18abr_manha" | "18abr_tarde" | null;
+type TurmaOption = "02mai_manha" | "02mai_tarde" | null;
 
 const TURMA_CONFIG = {
-  "18abr_manha": {
-    label: "18/04 - Manhã",
-    data: "18 de Abril",
+  "02mai_manha": {
+    label: "02/05 - Manhã",
+    data: "02 de Maio",
     diaSemana: "Sábado",
     horario: "09:00 às 13:00",
-    endereco: "Região Central - Curitiba",
-    enderecoDefinido: false,
+    endereco: "R. Mateus Leme, 531 B - Centro Cívico",
+    enderecoDefinido: true,
     sheetUrl: "https://script.google.com/macros/s/AKfycbyhlS8wyOCBcIitWTRJnga_H8MBi2KEYWcjz0MnkR3Y9nxo24NuW3Zv6OrTSM41Roc/exec",
     checkoutUrl: "https://checkout.institutodespertamente.shop/VCCL1O8SCWD0"
   },
-  "18abr_tarde": {
-    label: "18/04 - Tarde",
-    data: "18 de Abril",
+  "02mai_tarde": {
+    label: "02/05 - Tarde",
+    data: "02 de Maio",
     diaSemana: "Sábado",
     horario: "14:00 às 18:00",
-    endereco: "Região Central - Curitiba",
-    enderecoDefinido: false,
+    endereco: "R. Mateus Leme, 531 B - Centro Cívico",
+    enderecoDefinido: true,
     sheetUrl: "https://script.google.com/macros/s/AKfycbyhlS8wyOCBcIitWTRJnga_H8MBi2KEYWcjz0MnkR3Y9nxo24NuW3Zv6OrTSM41Roc/exec",
     checkoutUrl: "https://checkout.institutodespertamente.shop/VCCL1O8SCWD1"
   }
@@ -289,7 +289,7 @@ export const EnrollmentForm = () => {
         <div>
           <Label className="text-foreground font-medium flex items-center gap-2 mb-3">
             <Calendar className="h-5 w-5" />
-            Escolha sua turma - 18 de Abril
+            Escolha sua turma - 02 de Maio
           </Label>
           <div className="space-y-3">
             {(Object.keys(TURMA_CONFIG) as TurmaOption[]).filter(Boolean).map((turmaKey) => {
