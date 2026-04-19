@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,12 +31,40 @@ const TURMA_CONFIG = {
   }
 };
 
+const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
+type UtmKey = typeof UTM_KEYS[number];
+type Utms = Record<UtmKey, string>;
+
 export const EnrollmentForm = () => {
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [selectedTurma, setSelectedTurma] = useState<TurmaOption>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [utms, setUtms] = useState<Utms>({ utm_source: "", utm_medium: "", utm_campaign: "", utm_content: "", utm_term: "" });
   const { toast } = useToast();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const captured: Utms = { utm_source: "", utm_medium: "", utm_campaign: "", utm_content: "", utm_term: "" };
+    let hasUtmInUrl = false;
+
+    UTM_KEYS.forEach((key) => {
+      const val = urlParams.get(key);
+      if (val) {
+        captured[key] = val;
+        sessionStorage.setItem(key, val);
+        hasUtmInUrl = true;
+      }
+    });
+
+    if (!hasUtmInUrl) {
+      UTM_KEYS.forEach((key) => {
+        captured[key] = sessionStorage.getItem(key) ?? "";
+      });
+    }
+
+    setUtms(captured);
+  }, []);
 
   const formatWhatsApp = (value: string) => {
     const numbers = value.replace(/\D/g, "");
@@ -106,6 +134,7 @@ export const EnrollmentForm = () => {
       params.append("name", name.trim());
       params.append("phone", phoneToSend);
       params.append("turma", selectedTurma!.includes("manha") ? "manha" : "tarde");
+      UTM_KEYS.forEach((key) => params.append(key, utms[key]));
 
       await fetch(turmaConfig.sheetUrl, {
         method: "POST",
