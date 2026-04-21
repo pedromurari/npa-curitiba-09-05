@@ -159,12 +159,14 @@ export const EnrollmentForm = () => {
         lastName: name.split(' ').slice(1).join(' '),
       });
 
-      // 3. Disparo do Pixel (Browser-side) com eventID para desduplicação
+      // 3. Disparo do Pixel (Browser-side) com correspondência avançada + eventID
       if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('init', '1165211125501519', { ph: phoneToSend });
         (window as any).fbq('track', 'Lead', {
           content_name: `Inscrição - ${turmaConfig.label}`,
-          status: 'pending'
-        }, { 
+          value: 20.00,
+          currency: 'BRL'
+        }, {
           eventID: leadEventId,
           external_id: externalId
         });
@@ -194,7 +196,8 @@ export const EnrollmentForm = () => {
             },
             customData: {
               content_name: `Inscrição - ${turmaConfig.label}`,
-              status: 'pending'
+              value: 20.00,
+              currency: 'BRL'
             }
           }),
         });
